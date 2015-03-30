@@ -15,7 +15,15 @@ class StableState():
         if by >= 0.05 and by <= 0.3:
             return RedPencilState(1.0-by, effective)
         else:
-            return self
+            return StabilizingState(by, effective)
+    def is_red_pencil_promotion_active(self):
+        return False
+
+class StabilizingState():
+    def __init__(self, by, effective):
+        pass
+    def reduce_price(self, by, effective):
+        return self
     def is_red_pencil_promotion_active(self):
         return False
 
