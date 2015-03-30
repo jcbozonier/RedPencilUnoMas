@@ -1,4 +1,5 @@
 import unittest
+import datetime
 from good import *
 
 class given_a_fresh_good_with_no_history(unittest.TestCase):
@@ -22,8 +23,13 @@ class given_a_fresh_good_with_no_history(unittest.TestCase):
 
 class given_a_good_in_a_red_pencil_promotion(unittest.TestCase):
     def setUp(self):
+        self.some_day = datetime.datetime.now()
+        self.some_day_and_a_month = datetime.datetime.now() + datetime.timedelta(31)
         self.good = Good()
-        self.good.reduce_price(by=0.3)
+        self.good.reduce_price(by=0.2, effective=self.some_day)
     def test_when_price_reduction_exceeds_30_percent(self):
-        self.good.reduce_price(by=0.1)
+        self.good.reduce_price(by=0.2, effective=self.some_day)
         self.assertFalse(self.good.is_red_pencil_promotion_active(), "It should immediately stop the promotion.")
+    def test_when_30_days_have_passed(self):
+        self.good.reduce_price(by=0.01, effective=self.some_day_and_a_month)
+        self.assertTrue(self.good.is_red_pencil_promotion_active(), "It should immediately start the promotion.")
