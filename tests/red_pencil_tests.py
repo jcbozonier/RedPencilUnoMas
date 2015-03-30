@@ -33,6 +33,21 @@ class given_a_good_in_a_red_pencil_promotion(unittest.TestCase):
     def test_when_30_days_have_passed(self):
         self.good.reduce_price(by=0.01, effective=self.some_day_and_a_month)
         self.assertTrue(self.good.is_red_pencil_promotion_active(), "It should immediately start the promotion.")
+    def test_when_price_reduced(self):
+        self.good.reduce_price(by=0.01, effective=self.some_day)
+        self.assertTrue(self.good.is_red_pencil_promotion_active(), "It should remain in the promotion.")
+
+class given_a_good_in_a_red_pencil_promotion_and_price_is_reduced(unittest.TestCase):
+    def setUp(self):
+        self.some_day = datetime.datetime.now()
+        self.some_day_and_two_weeks = datetime.datetime.now() + datetime.timedelta(14)
+        self.some_day_and_a_month = datetime.datetime.now() + datetime.timedelta(32)
+        self.good = Good()
+        self.good.reduce_price(by=0.2, effective=self.some_day)
+        self.good.reduce_price(by=0.02, effective=self.some_day_and_two_weeks)
+    def test_when_price_reduced_outside_of_red_pencil_period(self):
+        self.good.reduce_price(by=0.02, effective=self.some_day_and_a_month)
+        self.assertFalse(self.good.is_red_pencil_promotion_active(), "It should no longer be in the promotion.")
 
 class given_a_good_stabilizing_after_having_a_non_promotional_price_reduction(unittest.TestCase):
     def setUp(self):

@@ -38,3 +38,20 @@ class RedPencilState():
             return StableState()
         elif (effective - self.effective).days > 30:
             return RedPencilState(1.0-by, effective)
+        else:
+            return StabilizingRedPencilState(red_pencil_effective = self.effective,
+                                             stabilizing_effective= effective)
+
+class StabilizingRedPencilState():
+    def __init__(self, red_pencil_effective, stabilizing_effective):
+        self.red_pencil_effective = red_pencil_effective
+        self.stabilizing_effective = stabilizing_effective
+    def is_red_pencil_promotion_active(self):
+        return True
+    def reduce_price(self, by, effective):
+        print "Reducing price in stabilizing red pencil"
+        if effective > self.red_pencil_effective:
+            if (effective - self.stabilizing_effective).days > 30:
+                return RedPencilState(1.0-by, effective)
+            else:
+                return StabilizingState(by, effective)
