@@ -13,7 +13,7 @@ class StableState():
         pass
     def reduce_price(self, by, effective):
         if by >= 0.05 and by <= 0.3:
-            return RedPencilState(1.0-by, effective)
+            return RedPencilPromotionState(1.0-by, effective)
         else:
             return StabilizingState(by, effective)
     def is_red_pencil_promotion_active(self):
@@ -27,7 +27,7 @@ class StabilizingState():
     def is_red_pencil_promotion_active(self):
         return False
 
-class RedPencilState():
+class RedPencilPromotionState():
     def __init__(self, promo, effective):
         self.promo_so_far = promo
         self.effective = effective
@@ -37,7 +37,7 @@ class RedPencilState():
         if self.promo_so_far * (1.0-by) < 0.70:
             return StableState()
         elif (effective - self.effective).days > 30:
-            return RedPencilState(1.0-by, effective)
+            return RedPencilPromotionState(1.0-by, effective)
         else:
             return StabilizingRedPencilState(red_pencil_effective = self.effective,
                                              stabilizing_effective= effective)
@@ -52,6 +52,6 @@ class StabilizingRedPencilState():
         print "Reducing price in stabilizing red pencil"
         if effective > self.red_pencil_effective:
             if (effective - self.stabilizing_effective).days > 30:
-                return RedPencilState(1.0-by, effective)
+                return RedPencilPromotionState(1.0-by, effective)
             else:
                 return StabilizingState(by, effective)

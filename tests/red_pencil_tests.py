@@ -2,7 +2,7 @@ import unittest
 import datetime
 from good import *
 
-class given_a_fresh_good_with_no_history(unittest.TestCase):
+class given_a_good_in_a_stable_state(unittest.TestCase):
     def setUp(self):
         self.good = Good()
     def test_when_price_reduced_less_than_5_percent(self):
@@ -21,7 +21,7 @@ class given_a_fresh_good_with_no_history(unittest.TestCase):
         self.good.reduce_price(by=.31)
         self.assertFalse(self.good.is_red_pencil_promotion_active(), "It should NOT activate the red pencil promotion")
 
-class given_a_good_in_a_red_pencil_promotion(unittest.TestCase):
+class given_a_good_in_a_red_pencil_promotion_state(unittest.TestCase):
     def setUp(self):
         self.some_day = datetime.datetime.now()
         self.some_day_and_a_month = datetime.datetime.now() + datetime.timedelta(31)
