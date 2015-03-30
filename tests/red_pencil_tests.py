@@ -19,3 +19,11 @@ class given_a_fresh_good_with_no_history(unittest.TestCase):
     def test_when_price_reduced_by_31_percent(self):
         self.good.reduce_price(by=.31)
         self.assertFalse(self.good.is_red_pencil_promotion_active(), "It should NOT activate the red pencil promotion")
+
+class given_a_good_in_a_red_pencil_promotion(unittest.TestCase):
+    def setUp(self):
+        self.good = Good()
+        self.good.reduce_price(by=0.3)
+    def test_when_price_reduction_exceeds_30_percent(self):
+        self.good.reduce_price(by=0.1)
+        self.assertFalse(self.good.is_red_pencil_promotion_active(), "It should immediately stop the promotion.")
